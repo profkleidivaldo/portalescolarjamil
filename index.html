@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal Escolar</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Poppins',sans-serif;
+  background:#f5f7fa;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* LOGIN */
+.login-box{
+  background:white;
+  padding:40px;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(0,0,0,0.1);
+  width:90%;
+  max-width:380px;
+  text-align:center;
+}
+.login-box img{width:80px;margin-bottom:10px;}
+.login-box h2{margin:10px 0;color:#2a3f54;}
+.login-box input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+.login-box button{
+  background:#2a3f54;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:8px;
+  width:100%;
+  cursor:pointer;
+}
+#error-msg{color:red;font-size:14px;display:none;margin-top:10px;}
+
+/* DASHBOARD */
+.dashboard{display:none;width:100%;height:100vh;}
+.sidebar{
+  width:260px;
+  background:#2a3f54;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  transition:width .3s, transform .3s;
+}
+.sidebar.collapsed{width:70px;}
+.sidebar .logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:15px;
+  background:#1f2e3d;
+  font-size:17px;
+  font-weight:600;
+}
+.sidebar .logo img{width:35px;}
+.sidebar.collapsed .logo span{display:none;}
+
+.sidebar ul{list-style:none;flex-grow:1;}
+.sidebar ul li{
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.sidebar ul li:hover,
+.sidebar ul li.active{background:#1a2735;}
+.sidebar ul li i{font-size:20px;}
+.sidebar.collapsed ul li span{display:none;}
+
+.main{flex-grow:1;display:flex;flex-direction:column;}
+.header{
+  height:60px;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  box-shadow:0 1px 5px rgba(0,0,0,0.1);
+}
+.toggle-btn{font-size:22px;cursor:pointer;color:#2a3f54;}
+.prof-area{
+  background:#2a3f54;
+  color:white;
+  padding:8px 14px;
+  border-radius:6px;
+  text-decoration:none;
+}
+
+.content{
+  padding:20px;
+  overflow:auto;
+  background:#f5f7fa;
+  height:calc(100vh - 60px);
+}
+
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:20px;
+}
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  text-align:center;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  cursor:pointer;
+}
+.card i{font-size:36px;color:#2a3f54;}
+.card h3{margin:10px 0;}
+.card p{font-size:14px;color:#666;}
+
+iframe{
+  width:100%;
+  height:80vh;
+  border:none;
+  border-radius:10px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    transform:translateX(-100%);
+    z-index:20;
+  }
+  .sidebar.show{transform:translateX(0);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login-box" id="login-screen">
+  <img src="https://cdn-icons-png.flaticon.com/512/167/167707.png">
+  <h2>Portal Escolar</h2>
+  <input type="password" id="senhaLogin" placeholder="Senha do aluno ou responsável">
+  <button onclick="entrar()">Entrar</button>
+  <p id="error-msg">Senha inválida</p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <img src="https://cdn-icons-png.flaticon.com/512/167/167707.png">
+      <span>Portal Escolar</span>
+    </div>
+    <ul>
+      <li class="active" data-page="inicio"><i class="ri-home-5-line"></i><span>Início</span></li>
+      <li data-page="calendario"><i class="ri-calendar-event-line"></i><span>Calendário</span></li>
+      <li data-page="classroom"><i class="ri-google-line"></i><span>Salas Classroom</span></li>
+      <li data-page="chats"><i class="ri-whatsapp-line"></i><span>Chats das Turmas</span></li>
+      <li data-page="livros"><i class="ri-book-open-line"></i><span>Livros Virtuais</span></li>
+      <li data-page="notas"><i class="ri-file-list-3-line"></i><span>Notas</span></li>
+      <li data-page="noticias"><i class="ri-newspaper-line"></i><span>Notícias e Eventos</span></li>
+      <li data-page="avaliacao"><i class="ri-survey-line"></i><span>Avaliação Institucional</span></li>
+      <li data-page="indices"><i class="ri-bar-chart-line"></i><span>Índices Escolares</span></li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <span class="toggle-btn" id="toggleBtn"><i class="ri-menu-line"></i></span>
+      <a href="https://profkleidivaldo.github.io/plataformagest/" target="_blank" class="prof-area">Área do Professor</a>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<script>
+const SENHAS=["aluno123","responsavel123"];
+const sidebar=document.getElementById("sidebar");
+const content=document.getElementById("content");
+
+function entrar(){
+  const s=document.getElementById("senhaLogin").value;
+  if(SENHAS.includes(s)){
+    document.getElementById("login-screen").style.display="none";
+    document.getElementById("dashboard").style.display="flex";
+    pages.inicio();
+  }else document.getElementById("error-msg").style.display="block";
+}
+
+document.getElementById("toggleBtn").onclick=()=>{
+  if(window.innerWidth<=768) sidebar.classList.toggle("show");
+  else sidebar.classList.toggle("collapsed");
+};
+
+function openIframe(url){
+  content.innerHTML=`<iframe src="${url}"></iframe>`;
+}
+
+function cards(lista){
+  content.innerHTML=`<div class="cards">${lista.map(c=>`
+    <div class="card" onclick="openIframe('${c.link}')">
+      <i class="${c.icon}"></i>
+      <h3>${c.title}</h3>
+      <p>${c.desc}</p>
+    </div>`).join("")}</div>`;
+}
+
+const pages={
+inicio: () => {
+  content.innerHTML = `
+  <div class="inicio-home">
+    <style>
+      .inicio-home{
+        max-width:1000px;
+        margin:auto;
+        background:#ffffff;
+        padding:24px;
+        border-radius:12px;
+        box-shadow:0 4px 12px rgba(0,0,0,.1);
+      }
+
+      .inicio-home .home-header{
+        text-align:center;
+        margin-bottom:20px;
+      }
+
+      .inicio-home .home-header h2{
+        margin-bottom:8px;
+        color:#0d6efd;
+      }
+
+      .inicio-home .home-header p{
+        font-size:1.05rem;
+        color:#444;
+        line-height:1.5;
+      }
+
+      .inicio-home .carousel{
+        position:relative;
+        overflow:hidden;
+        border-radius:12px;
+        margin-top:20px;
+      }
+
+      .inicio-home .carousel-track{
+        display:flex;
+        transition:transform .6s ease-in-out;
+        width:100%;
+      }
+
+      .inicio-home .carousel img{
+        width:100%;
+        height:420px;
+        object-fit:cover;
+        flex-shrink:0;
+      }
+
+      .inicio-home .carousel-btn{
+        position:absolute;
+        top:50%;
+        transform:translateY(-50%);
+        background:rgba(0,0,0,.6);
+        color:#fff;
+        border:none;
+        padding:10px 14px;
+        cursor:pointer;
+        font-size:18px;
+        border-radius:50%;
+        z-index:2;
+      }
+
+      .inicio-home .carousel-btn.prev{ left:10px; }
+      .inicio-home .carousel-btn.next{ right:10px; }
+
+      @media(max-width:768px){
+        .inicio-home .carousel img{
+          height:260px;
+        }
+      }
+    </style>
+
+    <div class="home-header">
+      <h2>Bem-vindos à EMEIEF Jamil Vilas Boas</h2>
+      <p>
+        Escola Municipal de Educação Infantil e Ensino Fundamental.<br>
+        Um espaço de aprendizagem, cuidado e formação cidadã.
+      </p>
+    </div>
+
+    <div class="carousel">
+      <div class="carousel-track">
+        <img src="https://drive.google.com/thumbnail?id=1tz6JCYfQZtMDgXJU59ZBIL_MwtnVuXa0&sz=w1600">
+        <img src="https://drive.google.com/thumbnail?id=19V1ISzBOgvjx0MDRFsIyiXQ7JwfY0LfN&sz=w1600">
+        <img src="https://drive.google.com/thumbnail?id=1-NROQyTPn2w_m6C81ijc4SHEsdjQl_nO&sz=w1600">
+      </div>
+
+      <button class="carousel-btn prev">&#10094;</button>
+      <button class="carousel-btn next">&#10095;</button>
+    </div>
+  </div>
+  `;
+
+  // JS executado APÓS o HTML existir
+  setTimeout(() => {
+    const container = content.querySelector('.inicio-home');
+    if (!container) return;
+
+    const track = container.querySelector('.carousel-track');
+    const slides = track.children.length;
+    const btnPrev = container.querySelector('.carousel-btn.prev');
+    const btnNext = container.querySelector('.carousel-btn.next');
+
+    let index = 0;
+
+    const update = () => {
+      track.style.transform = `translateX(-${index * 100}%)`;
+    };
+
+    btnPrev.onclick = () => {
+      index = (index - 1 + slides) % slides;
+      update();
+    };
+
+    btnNext.onclick = () => {
+      index = (index + 1) % slides;
+      update();
+    };
+
+    setInterval(() => {
+      index = (index + 1) % slides;
+      update();
+    }, 5000);
+
+  }, 0);
+}
+
+,
+
+calendario:()=>openIframe("https://profkleidivaldo.github.io/calendarioescolar/"),
+
+classroom:()=>cards([{title:"1° ANO A",desc:"Acesso às salas",icon:"ri-google-line",link:"https://classroom.google.com"}, {title:"2° ANO A",desc:"Acesso às salas",icon:"ri-google-line",link:"https://classroom.google.com"},{title:"3° ANO A",desc:"Acesso às salas",icon:"ri-google-line",link:"https://classroom.google.com"},{title:"4° ANO A",desc:"Acesso às salas",icon:"ri-google-line",link:"https://classroom.google.com"},{title:"5° ANO A",desc:"Acesso às salas",icon:"ri-google-line",link:"https://classroom.google.com"}]),
+
+chats:()=>cards([{title:"CHAT 1° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 2° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 3° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 4° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 5° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"}]),
+
+livros:()=>cards([{title:"1° ANO",desc:"Grupos oficiais",icon:"ri-book-2-line",link:"https://wa.me/"},{title:"2° ANO",desc:"Grupos oficiais",icon:"ri-book-2-line",link:"https://wa.me/"},{title:"3° ANO",desc:"Grupos oficiais",icon:"ri-book-2-line",link:"https://wa.me/"},{title:"4° ANO",desc:"Grupos oficiais",icon:"ri-book-2-line",link:"https://wa.me/"},{title:"5° ANO",desc:"Grupos oficiais",icon:"ri-book-2-line",link:"https://wa.me/"}]),
+ 
+
+notas:()=>openIframe("https://docs.google.com/spreadsheets"),
+
+noticias:()=>openIframe("https://profkleidivaldo.github.io/calendarioescolar/"),
+
+avaliacao:()=>cards([
+ {title:"Professores",desc:"Avaliação docente",icon:"ri-user-star-line",link:"https://forms.google.com"},
+ {title:"Alunos",desc:"Autoavaliação",icon:"ri-user-line",link:"https://forms.google.com"},
+ {title:"Comunidade",desc:"Avaliação da escola",icon:"ri-community-line",link:"https://forms.google.com"},
+ {title:"Equipe Gestora",desc:"Gestão escolar",icon:"ri-shield-user-line",link:"https://forms.google.com"}
+]),
+
+indices:()=>cards([
+ {title:"SAEB",desc:"Avaliação Nacional",icon:"ri-line-chart-line",link:"https://www.gov.br/inep"},
+ {title:"SAERO",desc:"Avaliação Estadual",icon:"ri-bar-chart-2-line",link:"https://seduc.ro.gov.br"},
+ {title:"Avaliações Internas",desc:"Diagnósticos da escola",icon:"ri-file-chart-line",link:"https://docs.google.com"},
+ {title:"Avaliações Externas",desc:"Outros indicadores",icon:"ri-global-line",link:"https://www.gov.br"}
+])
+};
+
+document.querySelectorAll(".sidebar li").forEach(li=>{
+  li.onclick=()=>{
+    document.querySelector(".sidebar li.active")?.classList.remove("active");
+    li.classList.add("active");
+    pages[li.dataset.page]();
+    if(window.innerWidth<=768) sidebar.classList.remove("show");
+  };
+});
+</script>
+
+</body>
+</html>
