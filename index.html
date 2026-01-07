@@ -220,16 +220,22 @@ function openIframe(url){
 function cards(lista){
   content.innerHTML = `
     <div class="cards">
-      ${lista.map(c => `
-        <div class="card" onclick="${c.external
-          ? `window.open('${c.link}','_blank')`
-          : `openIframe('${c.link}')`
-        }">
-          <i class="${c.icon}"></i>
-          <h3>${c.title}</h3>
-          <p>${c.desc}</p>
-        </div>
-      `).join("")}</div>`;
+      ${lista.map(c => {
+        const isExternal = c.link.startsWith("http");
+        return `
+          <div class="card" onclick="${
+            isExternal
+              ? `window.open('${c.link}','_blank')`
+              : `openIframe('${c.link}')`
+          }">
+            <i class="${c.icon}"></i>
+            <h3>${c.title}</h3>
+            <p>${c.desc}</p>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
 }
 
 const pages={
