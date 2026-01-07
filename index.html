@@ -137,6 +137,7 @@ iframe{
   border:none;
   border-radius:10px;
 }
+  
 
 /* MOBILE */
 @media(max-width:768px){
@@ -217,12 +218,18 @@ function openIframe(url){
 }
 
 function cards(lista){
-  content.innerHTML=`<div class="cards">${lista.map(c=>`
-    <div class="card" onclick="openIframe('${c.link}')">
-      <i class="${c.icon}"></i>
-      <h3>${c.title}</h3>
-      <p>${c.desc}</p>
-    </div>`).join("")}</div>`;
+  content.innerHTML = `
+    <div class="cards">
+      ${lista.map(c => `
+        <div class="card" onclick="${c.external
+          ? `window.open('${c.link}','_blank')`
+          : `openIframe('${c.link}')`
+        }">
+          <i class="${c.icon}"></i>
+          <h3>${c.title}</h3>
+          <p>${c.desc}</p>
+        </div>
+      `).join("")}</div>`;
 }
 
 const pages={
