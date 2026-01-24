@@ -175,6 +175,7 @@ iframe{
     <ul>
       <li class="active" data-page="inicio"><i class="ri-home-5-line"></i><span>Início</span></li>
       <li data-page="calendario"><i class="ri-calendar-event-line"></i><span>Calendário</span></li>
+       <li data-page="PPE"><i class="ri-book-open-line"></i><span>PPE interativo</span></li>
       <li data-page="classroom"><i class="ri-google-line"></i><span>Salas Classroom</span></li>
       <li data-page="chats"><i class="ri-whatsapp-line"></i><span>Chats das Turmas</span></li>
       <li data-page="livros"><i class="ri-book-open-line"></i><span>Livros Virtuais</span></li>
@@ -188,7 +189,6 @@ iframe{
   <div class="main">
     <div class="header">
       <span class="toggle-btn" id="toggleBtn"><i class="ri-menu-line"></i></span>
-      <a href="https://profkleidivaldo.github.io/plataformagest/" target="_blank" class="prof-area">Área do Professor</a>
     </div>
     <div class="content" id="content"></div>
   </div>
@@ -366,6 +366,7 @@ inicio: () => {
 ,
 
 calendario:()=>openIframe("https://profkleidivaldo.github.io/calendarioescolar/"),
+PPE:()=>openIframe("https://profkleidivaldo.github.io/PPEJamil/"),
 
 classroom: () => cards([
   {
