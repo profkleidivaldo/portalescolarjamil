@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Portal Escolar</title>
+<title>Portal Escolar - Jamil Vilas Boas</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
@@ -98,13 +98,6 @@ body{
   box-shadow:0 1px 5px rgba(0,0,0,0.1);
 }
 .toggle-btn{font-size:22px;cursor:pointer;color:#2a3f54;}
-.prof-area{
-  background:#2a3f54;
-  color:white;
-  padding:8px 14px;
-  border-radius:6px;
-  text-decoration:none;
-}
 
 .content{
   padding:20px;
@@ -126,20 +119,21 @@ body{
   text-align:center;
   box-shadow:0 2px 10px rgba(0,0,0,0.1);
   cursor:pointer;
+  transition: transform 0.2s;
 }
+.card:hover { transform: translateY(-5px); background: #fcfcfc; }
 .card i{font-size:36px;color:#2a3f54;}
 .card h3{margin:10px 0;}
 .card p{font-size:14px;color:#666;}
 
 iframe{
   width:100%;
-  height:80vh;
+  height:100%;
+  min-height: 80vh;
   border:none;
   border-radius:10px;
 }
-  
 
-/* MOBILE */
 @media(max-width:768px){
   .sidebar{
     position:fixed;
@@ -156,28 +150,26 @@ iframe{
 
 <body>
 
-<!-- LOGIN -->
 <div class="login-box" id="login-screen">
   <img src="https://cdn-icons-png.flaticon.com/512/167/167707.png">
   <h2>Portal Escolar</h2>
-  <input type="password" id="senhaLogin" placeholder="Senha do aluno ou responsável">
+  <input type="password" id="senhaLogin" placeholder="Senha (pegue na secretaria)">
   <button onclick="entrar()">Entrar</button>
   <p id="error-msg">Senha inválida</p>
 </div>
 
-<!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
   <div class="sidebar" id="sidebar">
     <div class="logo">
       <img src="https://cdn-icons-png.flaticon.com/512/167/167707.png">
-      <span>Portal Escolar</span>
+      <span>Jamil Vilas Boas</span>
     </div>
     <ul>
       <li class="active" data-page="inicio"><i class="ri-home-5-line"></i><span>Início</span></li>
       <li data-page="calendario"><i class="ri-calendar-event-line"></i><span>Calendário</span></li>
-       <li data-page="PPE"><i class="ri-book-open-line"></i><span>PPE interativo</span></li>
+      <li data-page="PPE"><i class="ri-book-open-line"></i><span>PPE Interativo</span></li>
       <li data-page="classroom"><i class="ri-google-line"></i><span>Salas Classroom</span></li>
-      <li data-page="chats"><i class="ri-whatsapp-line"></i><span>Chats das Turmas</span></li>
+      <li data-page="servicos"><i class="ri-customer-service-2-line"></i><span>Serviços Escolares</span></li>
       <li data-page="livros"><i class="ri-book-open-line"></i><span>Livros Virtuais</span></li>
       <li data-page="notas"><i class="ri-file-list-3-line"></i><span>Notas</span></li>
       <li data-page="noticias"><i class="ri-newspaper-line"></i><span>Notícias e Eventos</span></li>
@@ -221,11 +213,13 @@ function cards(lista){
   content.innerHTML = `
     <div class="cards">
       ${lista.map(c => {
-        const isExternal = c.link.startsWith("http");
+        // Se for Classroom ou Google Docs/Sheets, abre em aba externa. Caso contrário, no Iframe central.
+        const isExternal = c.link.includes("classroom.google.com") || c.link.includes("docs.google.com/spreadsheets");
+        
         return `
           <div class="card" onclick="${
-            isExternal
-              ? `window.open('${c.link}','_blank')`
+            isExternal 
+              ? `window.open('${c.link}','_blank')` 
               : `openIframe('${c.link}')`
           }">
             <i class="${c.icon}"></i>
@@ -243,78 +237,20 @@ inicio: () => {
   content.innerHTML = `
   <div class="inicio-home">
     <style>
-      .inicio-home{
-        max-width:1000px;
-        margin:auto;
-        background:#ffffff;
-        padding:24px;
-        border-radius:12px;
-        box-shadow:0 4px 12px rgba(0,0,0,.1);
-      }
-
-      .inicio-home .home-header{
-        text-align:center;
-        margin-bottom:20px;
-      }
-
-      .inicio-home .home-header h2{
-        margin-bottom:8px;
-        color:#0d6efd;
-      }
-
-      .inicio-home .home-header p{
-        font-size:1.05rem;
-        color:#444;
-        line-height:1.5;
-      }
-
-      .inicio-home .carousel{
-        position:relative;
-        overflow:hidden;
-        border-radius:12px;
-        margin-top:20px;
-      }
-
-      .inicio-home .carousel-track{
-        display:flex;
-        transition:transform .6s ease-in-out;
-        width:100%;
-      }
-
-      .inicio-home .carousel img{
-        width:100%;
-        height:420px;
-        object-fit:cover;
-        flex-shrink:0;
-      }
-
-      .inicio-home .carousel-btn{
-        position:absolute;
-        top:50%;
-        transform:translateY(-50%);
-        background:rgba(0,0,0,.6);
-        color:#fff;
-        border:none;
-        padding:10px 14px;
-        cursor:pointer;
-        font-size:18px;
-        border-radius:50%;
-        z-index:2;
-      }
-
-      .inicio-home .carousel-btn.prev{ left:10px; }
-      .inicio-home .carousel-btn.next{ right:10px; }
-
-      @media(max-width:768px){
-        .inicio-home .carousel img{
-          height:260px;
-        }
-      }
+      .inicio-home{ max-width:1000px; margin:auto; background:#ffffff; padding:24px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,.1); }
+      .home-header{ text-align:center; margin-bottom:20px; }
+      .home-header h2{ color:#2a3f54; margin-bottom:8px; }
+      .carousel{ position:relative; overflow:hidden; border-radius:12px; margin-top:20px; }
+      .carousel-track{ display:flex; transition:transform .6s ease-in-out; width:100%; }
+      .carousel img{ width:100%; height:420px; object-fit:cover; flex-shrink:0; }
+      .carousel-btn{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.6); color:#fff; border:none; padding:10px 14px; cursor:pointer; border-radius:50%; z-index:2; }
+      .carousel-btn.prev{ left:10px; }
+      .carousel-btn.next{ right:10px; }
+      @media(max-width:768px){ .carousel img{ height:260px; } }
     </style>
-
     <div class="home-header">
       <h2>Bem-vindos à EMEIEF Jamil Vilas Boas</h2>
-    
+      <p>Gestão participativa e ensino de qualidade.</p>
     </div>
     <div class="carousel">
       <div class="carousel-track">
@@ -322,141 +258,59 @@ inicio: () => {
         <img src="https://drive.google.com/thumbnail?id=160wVUt8oCQtUubh6EpxzvtAOxQdOFwWK&sz=w1600">
         <img src="https://drive.google.com/thumbnail?id=1GaBsXamzz9Qissa9aDSvu3uvpc7sg9ZY&sz=w1600">
       </div>
-
       <button class="carousel-btn prev">&#10094;</button>
       <button class="carousel-btn next">&#10095;</button>
     </div>
-  </div>
-  `;
-
-  // JS executado APÓS o HTML existir
+  </div>`;
+  
   setTimeout(() => {
-    const container = content.querySelector('.inicio-home');
-    if (!container) return;
-
-    const track = container.querySelector('.carousel-track');
-    const slides = track.children.length;
-    const btnPrev = container.querySelector('.carousel-btn.prev');
-    const btnNext = container.querySelector('.carousel-btn.next');
-
+    const track = document.querySelector('.carousel-track');
+    if(!track) return;
     let index = 0;
-
-    const update = () => {
-      track.style.transform = `translateX(-${index * 100}%)`;
-    };
-
-    btnPrev.onclick = () => {
-      index = (index - 1 + slides) % slides;
-      update();
-    };
-
-    btnNext.onclick = () => {
-      index = (index + 1) % slides;
-      update();
-    };
-
-    setInterval(() => {
-      index = (index + 1) % slides;
-      update();
-    }, 5000);
-
+    const slides = track.children.length;
+    document.querySelector('.next').onclick = () => { index = (index + 1) % slides; track.style.transform = `translateX(-${index * 100}%)`; };
+    document.querySelector('.prev').onclick = () => { index = (index - 1 + slides) % slides; track.style.transform = `translateX(-${index * 100}%)`; };
+    setInterval(() => { index = (index + 1) % slides; track.style.transform = `translateX(-${index * 100}%)`; }, 5000);
   }, 0);
-}
-
-,
+},
 
 calendario:()=>openIframe("https://profkleidivaldo.github.io/calendarioescolar/"),
 PPE:()=>openIframe("https://profkleidivaldo.github.io/PPEJamil/"),
 
 classroom: () => cards([
-  {
-    title: "1º ANO A",
-    desc: "Acesso às salas",
-    icon: "ri-google-line",
-    link: "https://classroom.google.com/c/NzkzMDcyNjc4ODc5?cjc=pccfcqj7",
-    target: "_blank"
-  },
-  {
-    title: "2º ANO A",
-    desc: "Acesso às salas",
-    icon: "ri-google-line",
-    link: "https://classroom.google.com/c/NzkzMDcyNTI1NjI0?cjc=icdhmwnd",
-    target: "_blank"
-  },
-  {
-    title: "3º ANO A",
-    desc: "Acesso às salas",
-    icon: "ri-google-line",
-    link: "https://classroom.google.com/c/NzkzMDcyOTY0MTQy?cjc=xdiqfyy3",
-    target: "_blank"
-  },
-  {
-    title: "4º ANO A",
-    desc: "Acesso às salas",
-    icon: "ri-google-line",
-    link: "https://classroom.google.com/c/NzkzMDcyNzA5MzIw?cjc=mbqojpdt",
-    target: "_blank"
-  },
-  {
-    title: "5º ANO A",
-    desc: "Acesso às salas",
-    icon: "ri-google-line",
-    link: "https://classroom.google.com/c/NzkzMDcyODIwNDI1?cjc=g2jngxbm",
-    target: "_blank"
-  }
-])
-,
+  { title: "1º ANO A", desc: "Abrir Google Classroom", icon: "ri-google-line", link: "https://classroom.google.com/c/NzkzMDcyNjc4ODc5?cjc=pccfcqj7" },
+  { title: "2º ANO A", desc: "Abrir Google Classroom", icon: "ri-google-line", link: "https://classroom.google.com/c/NzkzMDcyNTI1NjI0?cjc=icdhmwnd" },
+  { title: "3º ANO A", desc: "Abrir Google Classroom", icon: "ri-google-line", link: "https://classroom.google.com/c/NzkzMDcyOTY0MTQy?cjc=xdiqfyy3" },
+  { title: "4º ANO A", desc: "Abrir Google Classroom", icon: "ri-google-line", link: "https://classroom.google.com/c/NzkzMDcyNzA5MzIw?cjc=mbqojpdt" },
+  { title: "5º ANO A", desc: "Abrir Google Classroom", icon: "ri-google-line", link: "https://classroom.google.com/c/NzkzMDcyODIwNDI1?cjc=g2jngxbm" }
+]),
 
-chats:()=>cards([{title:"CHAT 1° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 2° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 3° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 4° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"},{title:"CHAT 5° ANO",desc:"Grupos oficiais",icon:"ri-whatsapp-line",link:"https://wa.me/"}]),
+servicos: () => cards([
+  { title: "Ouvidoria", desc: "Sugestões e reclamações", icon: "ri-feedback-line", link: "https://profkleidivaldo.github.io/formouvidoria/" },
+  { title: "Portfólio Digital", desc: "Projetos dos alunos", icon: "ri-gallery-line", link: "https://profkleidivaldo.github.io/portfolio/" },
+  { title: "Secretaria", desc: "Requerimentos e avisos", icon: "ri-file-text-line", link: "https://docs.google.com/forms/d/e/1FAIpQLSdMD9B6qU49UR00_VqKiIhfYLtZ8MBI0kuZRFgD6q95V3B1-w/viewform" },
+  { title: "Regimento PPE", desc: "Normas da Escola", icon: "ri-article-line", link: "https://profkleidivaldo.github.io/PPEJamil/" }
+]),
 
-livros:()=>cards([{title:"1° ANO",desc:"Atividades",icon:"ri-book-2-line",link:"https://profkleidivaldo.github.io/livroteste/"},{title:"2° ANO",desc:"Atividades",icon:"ri-book-2-line",link:"https://profkleidivaldo.github.io/livroteste/"},{title:"3° ANO",desc:"Atividades",icon:"ri-book-2-line",link:"https://profkleidivaldo.github.io/livroteste/"},{title:"4° ANO",desc:"Atividades",icon:"ri-book-2-line",link:"https://profkleidivaldo.github.io/livroteste/"},{title:"5° ANO",desc:"Atividades",icon:"ri-book-2-line",link:"https://profkleidivaldo.github.io/livroteste/"}]),
- 
+livros:()=>cards([{title:"Biblioteca Digital",desc:"Acesso aos livros",icon:"ri-book-2-line",link:"https://profkleidivaldo.github.io/livroteste/"}]),
 
 notas: () => cards([
-  
-  {
-    title: "2º ANO A",
-    desc: "Acesso às notas",
-    icon: "ri-google-line",
-    link: "https://docs.google.com/spreadsheets/d/1VIPziJjz5x7txixdm_183n2-vA5I1OTxkYPrTN9ly5I/edit?gid=891979437#gid=891979437",
-    target: "_blank"
-  },
-  {
-    title: "3º ANO A",
-    desc: "Acesso às notas",
-    icon: "ri-google-line",
-    link: "https://docs.google.com/spreadsheets/d/1rhNqV4V8cN-yM8-CEixw5V9EskX0mRsrY4k1kzmDUvg/edit?gid=891979437#gid=891979437",
-    target: "_blank"
-  },
-  {
-    title: "4º ANO A",
-    desc: "Acesso às notas",
-    icon: "ri-google-line",
-    link: "https://docs.google.com/spreadsheets/d/1KxsfsFpxGVstJ5LunZUWlGIMfxlRtl0TvFsO2txmXuA/edit?gid=891979437#gid=891979437",
-    target: "_blank"
-  },
-  {
-    title: "5º ANO A",
-    desc: "Acesso às notas",
-    icon: "ri-google-line",
-    link: "https://docs.google.com/spreadsheets/d/11uMzTIWcckPgdpcOwiKrlhxTWLG5hPWzn1wJirQ70-4/edit?gid=891979437#gid=891979437",
-    target: "_blank"
-  }
+  { title: "2º ANO A", desc: "Abrir Planilha de Notas", icon: "ri-table-line", link: "https://docs.google.com/spreadsheets/d/1VIPziJjz5x7txixdm_183n2-vA5I1OTxkYPrTN9ly5I/edit" },
+  { title: "3º ANO A", desc: "Abrir Planilha de Notas", icon: "ri-table-line", link: "https://docs.google.com/spreadsheets/d/1rhNqV4V8cN-yM8-CEixw5V9EskX0mRsrY4k1kzmDUvg/edit" },
+  { title: "4º ANO A", desc: "Abrir Planilha de Notas", icon: "ri-table-line", link: "https://docs.google.com/spreadsheets/d/1KxsfsFpxGVstJ5LunZUWlGIMfxlRtl0TvFsO2txmXuA/edit" },
+  { title: "5º ANO A", desc: "Abrir Planilha de Notas", icon: "ri-table-line", link: "https://docs.google.com/spreadsheets/d/11uMzTIWcckPgdpcOwiKrlhxTWLG5hPWzn1wJirQ70-4/edit" }
 ]),
+
 noticias:()=>openIframe("https://profkleidivaldo.github.io/revistaescolar/"),
 
 avaliacao:()=>cards([
- {title:"Professores",desc:"Avaliação docente",icon:"ri-user-star-line",link:"https://docs.google.com/forms/d/e/1FAIpQLSdMD9B6qU49UR00_VqKiIhfYLtZ8MBI0kuZRFgD6q95V3B1-w/viewform"},
- {title:"Alunos",desc:"Autoavaliação",icon:"ri-user-line",link:"https://docs.google.com/forms/d/e/1FAIpQLSdMD9B6qU49UR00_VqKiIhfYLtZ8MBI0kuZRFgD6q95V3B1-w/viewform"},
- {title:"Comunidade",desc:"Avaliação da escola",icon:"ri-community-line",link:"https://docs.google.com/forms/d/e/1FAIpQLSdMD9B6qU49UR00_VqKiIhfYLtZ8MBI0kuZRFgD6q95V3B1-w/viewform"},
- {title:"Equipe Gestora",desc:"Gestão escolar",icon:"ri-shield-user-line",link:"https://docs.google.com/forms/d/e/1FAIpQLSdMD9B6qU49UR00_VqKiIhfYLtZ8MBI0kuZRFgD6q95V3B1-w/viewform"}
+ {title:"Docentes",desc:"Avaliação dos professores",icon:"ri-user-star-line",link:"https://docs.google.com/forms/d/e/1FAIpQLSdMD9B6qU49UR00_VqKiIhfYLtZ8MBI0kuZRFgD6q95V3B1-w/viewform"},
+ {title:"Comunidade",desc:"Avaliação da Gestão",icon:"ri-community-line",link:"https://docs.google.com/forms/d/e/1FAIpQLSdMD9B6qU49UR00_VqKiIhfYLtZ8MBI0kuZRFgD6q95V3B1-w/viewform"}
 ]),
 
 indices:()=>cards([
- {title:"SAEB",desc:"Avaliação Nacional",icon:"ri-line-chart-line",link:"https://app.powerbi.com/view?r=eyJrIjoiMGVjMzIwZWQtM2IzZS00NmE0LTkwNjUtZjI1YjMyNTVhZGY0IiwidCI6IjI2ZjczODk3LWM4YWMtNGIxZS05NzhmLWVhNGMwNzc0MzRiZiJ9"},
- {title:"SAERO",desc:"Avaliação Estadual",icon:"ri-bar-chart-2-line",link:"https://rondoniadigital.com/noticia/28690/escolas-de-ji-parana-sao-premiadas-pela-qualidade-do-ensino"},
- {title:"Avaliações Internas",desc:"Diagnósticos da escola",icon:"ri-file-chart-line",link:"https://docs.google.com"},
- {title:"Avaliações Externas",desc:"Outros indicadores",icon:"ri-global-line",link:"https://www.gov.br"}
+ {title:"SAEB",desc:"Índice Nacional",icon:"ri-line-chart-line",link:"https://app.powerbi.com/view?r=eyJrIjoiMGVjMzIwZWQtM2IzZS00NmE0LTkwNjUtZjI1YjMyNTVhZGY0IiwidCI6IjI2ZjczODk3LWM4YWMtNGIxZS05NzhmLWVhNGMwNzc0MzRiZiJ9"},
+ {title:"SAERO",desc:"Índice Estadual",icon:"ri-bar-chart-2-line",link:"https://rondoniadigital.com/noticia/28690/escolas-de-ji-parana-sao-premiadas-pela-qualidade-do-ensino"}
 ])
 };
 
